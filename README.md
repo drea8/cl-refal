@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # CL-Refal 
 a Common Lisp interpretation of Valentin Turchin's functional programming language
 
