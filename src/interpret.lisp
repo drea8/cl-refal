@@ -15,11 +15,12 @@
 
 ;; to encode Refal pattern terms, we will
 ;; encode them in Common Lisp cells as
-;; '((l_term0 r_term0)
-;;   (l_term1 r_term1)
-;;   ;; ...
-;; )
-;; ... etc
+
+'(
+  (l_term0 r_term0)
+   (l_term1 r_term1)
+   ;; ...etc
+  )
 
 ;; Here is the binary addition pattern in a Lisp SEXP
 
@@ -30,6 +31,8 @@
 
 ;; note this is a cyclic group
 
+;; this pattern with an input of 00 returns 01 etc
+
 ;; we want a function that takes this kind
 ;; of term pattern structure as parameter data,
 ;; an input to match it against, and the
@@ -37,17 +40,15 @@
 
 ;; we can call it CLREFAL-APPLY
 
-(defun CL-REFAL-CALL (patterns input-data pattern-evaluator)
+(defun cl-refal-call (patterns input-data pattern-evaluator)
   "Apply the CL-REFAL Interpreter PATTERN-MATCHER on INPUT-DATA against PATTERNS"
   (funcall pattern-evaluator input-data patterns))  
 
 
-(defun PATTERN-EVALUATOR ()
-  "Pattern Logic Evaluator Control"
+(defun pattern-evaluator ()
   `(loop for i in patterns
       if (equal (first i) input)
-      return (second i))
-  )
+      return (second i)))  
 
 ;; We can test it this way
 
