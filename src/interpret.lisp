@@ -359,7 +359,7 @@ We need to clarify the process of Refal function execution now.
 '(e.Eq e.Eq)
 ;; is an expression with even length, which can be divided into two identifical halves 'ABCABC' or '8888' or the empty expression (divides into two empty ones)
 
-;; So with our Refal expression syntax space defined, let's translate
+;; So with our Refal Expression Syntax Space defined, let's translate
 ;; the definition into a Common Lisp left match predicate function
 
 (defun refal-left-match (x cell)
@@ -370,7 +370,12 @@ We need to clarify the process of Refal function execution now.
 ;; Advanced CL Refal Extensions
 ;;
 
+;; Semantic Expansion of Refal Structures
+
 ;; Infinite Refal Sentences
+
+;; Continuous Stream Processing in Refal
+;; Multi Modal Signals
 
 ;; Non-Flat Structure Matching
 
