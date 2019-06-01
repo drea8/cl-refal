@@ -374,4 +374,4 @@ We need to clarify the process of Refal function execution now.
 
 ;; Non-Flat Structure Matching
 
-;; Refal Pattern Matching morphogenesis
+;; Refal Pattern Matcher and Compiler Morphogenesis
