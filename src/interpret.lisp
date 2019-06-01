@@ -1,26 +1,88 @@
 
 ;; Common Lisp REFAL Interpreter
 
-;; This source code will also serve as a
-;; basic introductory tutorial to embedding
-;; Refal-like languages in Common Lisp
+;; Valentin Turchin was a Russian cyberneticist who
+;; wrote a programming language called "REFAL",
+;; short for Recursive Evaluation of Functions Language,
+;; for his research in physics, automata, natural language translation,
+;; artificial intelligence, and complexity theory.
 
-;; In writing our CL refal implementation
-;; lets give some sample examples, lets
-;; start with a simple 2 binary adder
+;; Because of its elegance and simplicity, I
+;; consider it one of the most 'pure' functinal programming
+;; language models. This simplicity and many of
+;; Turchin's other design choices make it possibly
+;; easier to extend via metaprogramming and compiler
+;; construction than Lisp, Haskell, or Prolog.
+;; This repository will test this idea.
 
-;; this is a permutation, and cylic,
-;; but for now let us treat it as a Refal
-;; function.
+;; There is a robust implementation online maintained
+;; by a Russian technical university but we will
+;; analyze the ideas behind Refal by implementing
+;; a subset of it in Common Lisp
 
-;; to encode Refal pattern terms, we will
-;; encode them in Common Lisp cells as
+;; This file interpret.lisp will serve as a
+;; introductory tutorial to embedding
+;; Refal-like languages in Common Lisp, author uses
+;; Steel Bank Common Lisp, Emacs, and SLIME
+;; and assumes knowledge of basic Common Lisp
+;; I may include notes that seem trivial to the
+;; advanced programmer, excuse them they are for
+;; my own thoughts or beginner's study.
+
+
+;; Introduction to Refal
+
+;; A Refal program is a recursive List (or set thereof)
+;; of Sentences, formed by Left and Right terms
+;; that forms a Function mapping from Predicates
+;; satisfies on the Left to results returned by their
+;; Right term in the same Sentence.
+
+;; This is what the original Refal looks like
+
+"BinAdd {
+ '0' '0' = '0';
+ '0' '1' = '1';
+ '1' '0' = <BinAdd '0' '1'>;
+ '1' '1' = '10';
+}"
+
+
+;; The default operation in Refal is concatenation, so
+;; '0' '0' is equivalent to the Lisp list (or string) '(0 0) or "00"
+;; This is what it will look like embedded in Common Lisp Refal
+
+'(def binadd
+  ((0 0) 00)
+  ((0 1) 01)
+  ((1 0) (binadd 0 1))
+  ((1 1) 10))
+
+;; from the Refal source material by Valentin Turchin
+
+"Refal Function Execution	  
+
+We need to clarify the process of Refal function execution now.
+
+1. A sentence is elected from the left side Patterns for which you can get a function argument by changing the variables in it to some values. If no such Sentence exists, then the program ends with an error of recognition impossible
+
+2. The variables values are fixed when they request to the function argument when they are placed in the left part of the selected sentence, if there are several such sets of variables values (permutations), then its fixed the one in which the leftmost e-variable takes the shortest value. If it does not resolve ambiguities, then the next e-variable is considered and so on.
+
+3. The variables are replaced by their values in the right side of the selected sentence. Then the functions on the right are calculated."
+
+
+;; to encode Refal Sentence pattern terms, we will
+;; write them in Common Lisp cells as
 
 '(
   (l_term0 r_term0)
    (l_term1 r_term1)
    ;; ...etc
   )
+
+;; In writing our CL refal implementation
+;; lets give some sample examples, lets
+;; start with a simple 2 binary adder
 
 ;; Here is the binary addition pattern in a Lisp SEXP
 
@@ -29,19 +91,17 @@
   (10 11)
   (11 00))
 
-;; note this is a cyclic group
+;; Note this is a cylic group,
+;; but for now let us focus on it as a Refal function pattern
 
-;; this pattern with an input of 00 returns 01 etc
+;; This pattern with an input of 00 returns 01 etc
 
-;; we want a function that takes this kind
-;; of term pattern structure as parameter data,
+;; We want a function that takes this kind
+;; of Sentence terms structure as parameter data,
 ;; an input to match it against, and the
 ;; Pattern Matcher Function object (unique to CL-REFAL)
 
-;; we can call it CLREFAL-APPLY
-
 (defun cl-refal-call (patterns input-data pattern-evaluator)
-  "Apply the CL-REFAL Interpreter PATTERN-MATCHER on INPUT-DATA against PATTERNS"
   (funcall pattern-evaluator input-data patterns))  
 
 
@@ -160,6 +220,23 @@
 ;; Because getting into formal modeling merits the discussion
 ;; of Performance optimization.
 
+;; Refal terms requiring lists of string checks can
+;; be modeled as language acceptors (some set of passing strings)
+;; and thus a compiler for Refal understands the string
+;; acceptors of term predicates and optimizes for traversal
+;; of the ideal runtime for some performance feature.
+
+;; So eventually we want an Automata theoretic model of
+;; valid Refal programs and their compilation "morphogenesis",
+;; how more complex Refal compilers grow in runtime complexity
+;; for optimizing performance features of choice.
+
+;; The runtime complexity grows with the logical-semantic
+;; complexity and length of terms in the pattern matching
+;; structure of the Refal function patterns and the
+;; runtime structure of the Refal pattern matcher object,
+;; which merits study in its own right.
+
 ;; Before doing so we need to implement the full REFAL syntax,
 ;; as we have not fully implemented Turchin's original REFAL
 ;; with string expression and tree matching term expressions,
@@ -168,16 +245,16 @@
 ;; To cover what we want to meta-model in Refal let's go over what
 ;; Turchin actually included for the language.
 
-;; Thus far we have already matched basic character strings.
+;; Thus far we have already matched basic character lists.
 
 (funcall
  (pattern-matcher-maker
   #'basic-left-match
   #'basic-right-out)  
- 'aa
- '((a aa)
-   (aa aaa)
-   (aaa a)))
+ 'a
+ '((a ab)
+   (ab aba)
+   (aba acba)))
 
 ;; Let's include the dynamic symbol pattern matching utility Turchin had
 ;; in the original Refal pattern matcher object function
@@ -248,14 +325,28 @@
 '(s.Edge s.Middle s.Edge)
 ;;- first and last must match, ie 'kek' or '^_^'
 
-'((s.Edge e s.Edge) s.Edge)
-;; on INPUT 'lel' returns l
-;; otherwise pass
+;; Note the natural language semantic name binds we have
+;; for these variables "edge" "middle" and so forth.
 
-					;*
+;; Keep these natural language tokens in mind
+;; for when we fully expand the semantics of a Refal
+;; pattern match reader object.
+
+;; In our analysis of Refal programs, at some point we
+;; want to have a model of the "programmer's reader",
+;; capable of comprehension of symbolic tokens like
+;; "s.Edge" and "s.Middle" in the source outright
+;; from first glance following basic Latin alphabet
+;; and English comprehension training.
+
+'((s.Edge e s.Edge) s.Edge)
+;; with INPUT '404' returns '4'
+
+					
 '(s.first e.middle s.last)
-;; any expression containing at least two symbols
+;; accepts any expression containing at least two symbols
 ;; e.middle could be a further string, in this case procedurally the first and last characters of the list input buffer are first checked (as a type), a Refal Pattern Type
+
 ;; e. expressions can also null, for above the middle e.middle can be nulle so ++ or -+ is valid for s.first and s.last values
 ;; non-abbreviated symbols and strs are literal like
 
@@ -263,18 +354,6 @@
 
 '(e.Eq e.Eq)
 ;; is an expression with even length, which can be divided into two identifical halves 'ABCABC' or '8888' or the empty expression (divides into two empty ones)
-
-;; from the Refal source material by Valentin Turchin
-
-"Refal Function Execution	  
-
-We need to clarify the process of Refal function execution now.
-
-1. A sentence is elected from the left side Patterns for which you can get a function argument by changing the variables in it to some values. If no such Sentence exists, then the program ends with an error of recognition impossible
-
-2. The variables values are fixed when they request to the function argument when they are placed in the left part of the selected sentence, if there are several such sets of variables values (permutations), then its fixed the one in which the leftmost e-variable takes the shortest value. If it does not resolve ambiguities, then the next e-variable is considered and so on.
-
-3. The variables are replaced by their values in the right side of the selected sentence. Then the functions on the right are calculated."
 
 (defun refal-left-match (x cell)
   )
