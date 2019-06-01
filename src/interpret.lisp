@@ -25,6 +25,12 @@
 ;; due to the "non-flat" possibility space of data structures
 ;; readable by Refal-like languages.
 
+;; The compiler writer if they are a good Cyberneticist
+;; like Turchin also no longer takes for granted the
+;; given "Programmer's Reader" one has learned from education
+;; in one's native tongues and symbol systems,
+;; that "who is the master that makes the grass green" etc
+
 ;; Refal is described thusly on wikipedia in 2019,
 ;; "The basic data structure of Lisp and Prolog is a linear list built by cons operation in a sequential manner, thus with O(n) access to list's nth element...
 
