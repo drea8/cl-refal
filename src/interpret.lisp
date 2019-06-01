@@ -2,10 +2,15 @@
 ;; Common Lisp REFAL Interpreter
 
 ;; Valentin Turchin was a Russian cyberneticist who
-;; wrote a programming language called "REFAL",
+;; wrote a programming language called "REFAL" around 1966,
 ;; short for Recursive Evaluation of Functions Language,
 ;; for his research in physics, automata, natural language translation,
 ;; artificial intelligence, and complexity theory.
+
+;; Refal is described thusly on wikipedia in 2019,
+;; "The basic data structure of Lisp and Prolog is a linear list built by cons operation in a sequential manner, thus with O(n) access to list's nth element...
+
+;; ...Refal's lists are built and scanned from both ends, with pattern matching working for nested lists as well as the top-level one. In effect, the basic data structure of Refal is a tree rather than a list. This gives freedom and convenience in creating data structures while using only mathematically simple control mechanisms of pattern matching and substitution... In effect, the basic data structure of Refal is a tree rather than a list."
 
 ;; Because of its elegance and simplicity, I
 ;; consider it one of the most 'pure' functinal programming
@@ -54,8 +59,8 @@
 
 '(def binadd
   ((0 0) 00)
-  ((0 1) 01)
-  ((1 0) (binadd 0 1))
+  ((0 1) 01) ;; note the
+  ((1 0) (binadd 0 1)) ;; symmetry here
   ((1 1) 10))
 
 ;; and would be called like
