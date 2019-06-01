@@ -86,9 +86,9 @@ We need to clarify the process of Refal function execution now.
 
 ;; In writing our CL refal implementation
 ;; lets give some sample examples, lets
-;; start with a simple 2 binary adder
+;; start with a simple binary increment
 
-;; Here is the binary addition pattern in a Lisp SEXP
+;; Here is the binary increment pattern in a Lisp SEXP
 
 '((00 01)
   (01 10)
@@ -118,7 +118,7 @@ We need to clarify the process of Refal function execution now.
 
 ;; We apply CL-REFAL-CALL
 (cl-refal-call
-;; to the cyclic binary pattern space
+;; to the cyclic binary space
  '((0 1)
    (1 0))
  ;; with input member 1
