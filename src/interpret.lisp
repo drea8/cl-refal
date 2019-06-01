@@ -340,8 +340,9 @@ We need to clarify the process of Refal function execution now.
 ;; want to have a model of the "programmer's reader",
 ;; capable of comprehension of symbolic tokens like
 ;; "s.Edge" and "s.Middle" in the source outright
-;; from first glance following basic Latin alphabet
-;; and English comprehension training.
+;; from human eyeballs following basic Latin alphabet
+;; and English comprehension training, or 
+;; "who is the master that makes the grass green" etc
 
 '((s.Edge e s.Edge) s.Edge)
 ;; with INPUT '404' returns '4'
