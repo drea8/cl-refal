@@ -1,0 +1,580 @@
+
+ REFAL
+ Recursive Functions Algorithms Language
+
+Refal is a functional programming language oriented towards symbolic computations, including string processing, language translation, artificial intelligence, and compiler research.
+
+Refal is one of the oldest functional languages, first conceived of in 1966 and first implemented in 1968, invented by Russian cyberneticist Valentin Turchin who used it for research in Supercompilers and Metacompilers.
+
+
+This file will be using the Refal-5λ implementation of REFAL 5 created at Bauman Moscow State Technical University Department of Computer Science and Technologies. To compile run "srefc source.ref". On this machine the compiler is at "simple-refal/bin/srefc"
+
+Let us examine the following program
+
+* Single Line Comment	     
+/* Multi Line 
+             Comment */
+$ENTRY Go {                
+       = <Prout 'Hello, World!'>;
+       }
+       
+
+Any program in Refal is a set of functions. The 'Go' function is defined here. The function definition is written as the name of the function followed by a Block (the function body is enclosed in braces {,}. Any Refal program must have a single function definition named 'Go' or 'GO', the program execution process is the function Go with an empty argument.
+
+Hieroglyphic `$ENTRY` will be clarified in the next sections. Just need to know that the key word `$ENTRY` must precede the `Go` (or `GO`) program entry point.
+
+There is a single Sentence in the second line. A Sentence is a rule, which define how to put up the function value on the argument subset. A function can consist of several Sentences, each ends with a semicolon ';'. A Semicolon may not be used at the end of the last sentence.
+
+Any sentence consists of two parts
+* a Pattern on the left, which describes a value subset of the function argument on which the sentence is applied.
+* a Result on the right, which describe the function value on the subset
+The left and right parts are divided by '='
+
+NOTE: later we will consider the extended Refal syntax in which sentence syntax will be more complicated.
+
+The sentence in the program 'hello.ref' means that it can be applied on the empty function argument only (there is nothing before the equality). The right side describes the function as the result of the 'Prout' function computing. A sequence of signs 'Hello World!' is transferred to it. A function call on Refal is written with angle brackets '<' and '>'. The function name has to be placed after the opening brace.
+
+The function Prout computes "emptiness" with any argument. However, its implementation has some side effects. It prints an argument on the screen. Prour is included in the language standard library. 
+
+Almost all Refal programs are written actually for these side effects. After the function 'Go' computes the result is discarded and the program is completed.
+
+In the field of automatic program conversion and verification, for example by Supercompilation, an interesting math function is written in Refal. It is fed to a tool like the Refal 5 supercompiler SCP4 and then the conversion result or function analysis are examined. Research in the field of tool development is one of the most important Refal applications today.
+
+ Programs with Several Sentences
+
+Refal is a language with free syntax. The transition to a new line is exactly the same non-space character as a space or tab. A pair of exceptions, the opening and closing quote marks should be placed in one line (the line break can not be placed inside a sequence of characters) and the line feed character completes a one-line comment by definition.
+
+Secondly, each of the characters inside the single quote marks is autonomous.
+The following entries are equivalent: `'Hello'`, `'Hel' 'lo'`,
+`'H' 'e' 'l' 'l' 'o'`.
+
+Thirdly, the function name can be any sequence of letters, numbers, signs `_`
+(“dash”) and `-` (“hyphens”), starting with a dash or a letter. For example,
+`Go`, `Hello`, `A-plus-B`, `_remove_file`, `ANSWER_42`. Lowercase and uppercase
+letters are different, i.e. the names `hello`, `Hello` and `HELLO` are
+different.
+
+Let's write a function that adds two binary digits.
+
+BinAdd {
+ '0' '0' = '0';
+ '0' '1' = '1';
+ '1' '0' = <BinAdd '0' '1'>;
+ '1' '1' = '10';
+}
+
+The left Patterns of the sentences could be written together, like '00'.
+
+The definition scope of this function will be pairs of characters '00', '01', '10', '11'. When you try to call this function with an argument outside the definition area, the program crashes (an impossible assimilation error. <<recognition impossible>>).
+
+Let's write a function that substracts two digits
+
+BinSub {
+  '0' '0' = '0';
+  '1' '1' = '0';
+  '1' '0' = '1';
+  '0' '1' = '-' <BinSub '1' '0'>;
+}
+
+Let's write a function that checks the equality of two binary numbers that are not greater than 2 (ie 10 in binary notation) and not less than -1. We assume that both numbers in the function argument are separated by the '=' sign.
+
+IsEqual {
+  '-1=-1' = 'True'; '-1=0' = 'False'; '-1=1' = 'False'; '-1=10' = 'False';
+  '0=-1' = 'False'; '0=0' = 'True'; '0=1' = 'False'; '0=10' = 'True';
+  '1=-1' = 'False'; '1=0' = 'False'; '1=1' = 'True'; '1=10' = 'False';
+  '10=-1' = 'False'; '10=0' = 'False'; '10=1' = 'True'; '10=10' = 'True';
+}
+
+Yes, it’s boring. Yes, it’s long. Later we will see how to shorten this entry.
+
+ Let’s write a function Go that demonstrates:
+ * addition commutability
+ * subtraction noncommutability.
+
+$ENTRY Go {
+  = <Prout '1+0=0+1? ' <IsEqual <BinAdd '1' '0'> '=' <BinAdd '0' '1'>>>
+    <Prout '1-0=0-1? ' <IsEqual <BinSub '1' '0'> '=' <BinSub '0' '1'>>>;
+}
+
+the printed result is
+
+1+0=0+1? True
+1-0=0-1? False
+
+
+We have considered functions that have fixed values in the Patterns on the left of the Sentences thus far.
+
+The function Domain of such functions are obviously all the enumerated values of the samples.
+
+It is clear that it is hell of a lot for writing non-trivial functions with a Finite definition Domain and you have to write a Sentence for each of the Argument values. This led to the fact that even such a simple function as IsEqual required as many as 16 Sentences.
+
+We will learn how to write Functions with an Infinite Domain definition in the next section.
+
+  Variables
+
+The left-hand side Pattern defines an argument values Subset at which this sentence is applicable, as noted above. We have considered only cases of subsets consisting of one single element by now.
+
+Refal allows us to write in the left parts of expressions (the exact definition of the term "expression" will be given later), which contain uknown fragments, Variables, in addition to explicitly set.
+
+The variable Type determines the value's Sets that variables can take. There are three types of variables in Refal.
+* s-variables or symbol variable
+* t-variables can be any single term, both a symbol and expression
+* e-variables can take an expression as sequence of terms
+
+The value of an s-variable or symbol variable can be any single symbol. The value of an e-variable or an expression variable can be any fragment of the function argument, including empty.
+
+A variable is written as a sign (s, t, e) type, followed by a sign . "point" and the variable name is a sequence of letters and numbers. The variable name is often called the variable index.
+
+If the variable appears several times in the expression, then it is called repeated. All its occurences must have the same value.
+
+Let's consider some expressions with variables:
+
+* s.1 s.2 s.3 - any three symbols, like 'ABC' or '999' or '@#$'
+* s.A s.A s.A - any three identical symbols like '666' or 'www'
+* s.Edge s.Middle s.Edge - first and last must match, ie 'kek' or '^_^'
+* s.first e.middle s.last - any expression containing at least two symbols
+* s.Edge e.Center s.Edge - ie '++' or 'revolver'
+* '(' e.Inner ')' enclosed with brackets like '()' or '(ok)'
+* e.Key '=' e.Value - contains one equal sign at least '=','x = 1', 'A = B == C = D'
+* e.Eq e.Eq is an expression with even length, which can be divided into two identifical halves 'ABCABC' or '8888' or the empty expression (divides into two empty ones)
+
+Variables can appear both in the Pattern and the Value, only variables that are in the left can be used on the right side of the sentence in Refal.
+
+
+   Refal Function Execution	  
+
+We need to clarify the process of Refal function execution now.
+
+1. A sentence is elected from the left side Patterns for which you can get a function argument by changing the variables in it to some values. If no such Sentence exists, then the program ends with an error of recognition impossible
+
+2. The variables values are fixed when they request to the function argument when they are placed in the left part of the selected sentence, if there are several such sets of variables values (permutations), then its fixed the one in which the leftmost e-variable takes the shortest value. If it does not resolve ambiguities, then the next e-variable is considered and so on.
+
+3. The variables are replaced by their values in the right side of the selected sentence. Then the functions on the right are calculated.
+
+The process is considered more in detail in the next chapter.
+
+
+
+  Structure Brackets
+
+A purely mathematically studied Refal subset is sufficient for writing any complex algorithm. But this is not enough in practice, thus far we have been only using 'flat' strings only, wheras many non-trivial algorithms require hiearchically organized data.
+
+What is a data hiearchy? It is an opportunity to work with some piece of data as one object, by abstracting from its internal complex structure.
+
+In order to work in Refal with an expression as a single object, it is enclosed in parenthesis, which are called structure brackets. Such an object called bracket term can be the part of another expression, which can be also enclosed in brackets. Hierarchical nested data are built in Refal this way.
+
+The symbols we considered before are also terms. In this way, a Refal expression consists of terms each of which can be either a symbol or a bracket term that contains another expression in Refal.
+
+Angled brackets are called Evaluation, activation, or call brackets.
+
+Round brackets are Structure Brackets, the expression
+
+('abc') 'def' (('ghi' 'j' ('klm') ()) 'nop' ((('rst')))
+
+consists of 9 terms. The first term is bracketed. It contains an expression of three symbol terms, the next three form the string 'def', the next is a bracketed one again consisting of three bracketed terms and one symbol. Its last bracketed term contains an empty expression ().
+
+The brackets must form the correct bracket structure on both the left and right sides of the sentences in a Refal expression. In doing so, on the right side of the statements round and angle brackets can not overlap each other.
+
+Let us clarify our understanding of variables from a perspective of new knowledge.
+
+* e-variables can take a sequence of terms
+* t-variables can be any single term, both a symbol and an expression in brackets
+
+
+Let’s depict Pushkin's genealogy in the form of a Refal expression. Each character of the family tree will be represented in the form of a bracket term that contains the character's name and two terms: father and mother. If the ancestor is known it will be depicted as the same character, if not – in its place will be located the symbol '?'. Thus, each character can be mapped to the form sample of the form
+
+(e.Name t.Father t.Mother)
+
+
+Note. In fact, the A.S. Pushkin bloodline is known much deeper. For the sake of clarity some ancestors were skipped at different levels of the hierarchy here.
+
+
+ Let's write a function that takes the family tree and the ancestor branch in the form of a chain of 'MFFM…' characters – where 'M' means mother, 'F' is father and finds the corresponding ancestor.
+
+For example, 'F' is father, 'FF' is the paternal grandfather, 'MM' is the maternal grandmother, 'FM' is the paternal grandmother, 'FMM' is the paternal maternal grandmother, the empty expression is the character itself.
+
+
+FindAncestor {
+  /* advancing on the father line */
+  (e.Name t.Father t.Mother) 'F' e.Branch
+    = <FindAncestor t.Father e.Branch>;
+
+  /* advancing on the mother line */
+  (e.Name t.Father t.Mother) 'M' e.Branch
+    = <FindAncestor t.Mother e.Branch>;
+
+  /* an unknown character has unknown the ancestors */
+  '?' e.Branch = '?';
+
+  /* Branch ended – the person you are looking for is the current */
+  (e.Name t.Father t.Mother) /* empty branch */ = e.Name;
+}
+
+In other words, in order to find an ancestor on the father by the bloodline (the branch starts with 'F…'), you should take the father's bloodline (t.Father field) and look for the ancestor in it (throwing the branch 'F'from the beginning) – this is what makes the first sentence. The second sentence is likewise.
+
+If the bloodline is unknown at some stage, then any ancestor will be unknown. This case processes the third sentence. If the branch is empty (an empty branch is specified or it is emptied in a few iterations), then the last fourth sentence (the root of the current bloodline) is the person you are looking for.
+
+
+Let's write a program that prints some of Pushkin's ancestors (pushkin.ref).
+
+$ENTRY Go {
+  = <Prout <FindAncestor <Pushkin> 'FF'>>
+    <Prout <FindAncestor <Pushkin> 'FFF'>>
+    <Prout <FindAncestor <Pushkin> 'MFF'>>
+    <Prout <FindAncestor <Pushkin> 'MFM'>>
+    <Prout <FindAncestor <Pushkin> 'F'>>
+    <Prout <FindAncestor <Pushkin> 'FM'>>
+    <Prout <FindAncestor <Pushkin> 'FMF'>>
+    <Prout <FindAncestor <Pushkin> 'FMFM'>>
+}
+
+FindAncestor {
+  /* advancing on the father line */
+  (e.Name t.Father t.Mother) 'F' e.Branch = <FindAncestor t.Father e.Branch>;
+
+  /* advancing on the mother line */
+  (e.Name t.Father t.Mother) 'M' e.Branch = <FindAncestor t.Mother e.Branch>;
+
+  /* an unknown character has unknown the ancestors */
+  '?' e.Branch = '?';
+
+  /* Branch ended – the person you are looking for is the current */
+  (e.Name t.Father t.Mother) = e.Name;  /* empty branch */
+}
+
+Pushkin {
+  = (
+      'Alexander Sergeyevich Pushkin'
+      (
+        'Sergey Lvovich Pushkin'
+        (
+          'Lev Aleksandrovich Pushkin'
+          '?'   
+          (
+            'Evdokia Ivanovna Golovin'
+            '?' 
+            '?
+          )
+        )
+        (
+          'Olga Vasilievna Chicherina'
+          ('Vasily Ivanovich Chicherin??')
+          '?'
+        )
+      )
+      (
+        'Nadezhda Ossipovna Pushkina (Gannibal)'
+        (
+          'Ossip Abramovich Gannibal'
+          ('Abram Petrovich Gannibal (The Moor of Peter the Great)??')
+          ('Christina Regina von Sioberg??')
+        )
+        ('Maria Alekseevna Pushkina??')
+      )
+    )
+}
+
+
+  Other Types of Symbols, Numbers
+
+Refal can operate not only with characters, but also other types of symbols.
+
+According to Refal, symbol is an object which cannot be spread out on small parts using a pattern. Refal symbols other than characters, are numbers and words.
+
+Number symbol or macrodigit is a number between the range of 0 and 2^32 - 1 written in decimal form.
+
+Refal includes some arithmetic functions
+
+Add
+Sub
+Mul
+Div
+Mod (remainder of division)
+Divmod (result of quotient and remainder)
+Compare
+Numb (converts chain of characters into decimal num)
+Symb (converts number into chain of characters)
+
+(see tutorial for long number representation and fitting macrodigits)
+-> 542 300 422
+as radix 2^32
+so =
+542x((2^32)^2) + 300*(2^32) + 422
+
+  Words (see readme 3)
+
+Character strings as identifiers for words are enclosed in double quotes "This is one symbol". 
+
+
+ Abstract Refal-machine, View Field Semantics
+
+(see readme 3)
+
+
+ Review of Expression Types
+
+* object expressions - symbols and round brackets
+* active/evaluation expression - angular brackets + terms
+* Pattern expressions - symbols, structural brackets, and variables, in  the left of a sentence 
+* Result expression - round and angular brackets, variables, and symbols on right part of expression
+
+
+ Higher Order Functions and Refal5l Extensions
+
+
+ REFAL 5 Programming Guide
+
+ from "refal.botuk.ru/book/html"
+ based on the book by Valentin Turchin
+
+
+Unlike Lisp, Refal is based on pattern matching. Due to that, a typical program in Refal is two or three times shorter on average than the analogous program in Lisp and much more readable.
+
+When compared with Prolog, Refal is conceptually simpler. Its pattern matching works in the forward direction, not backwards (starting from the goal). There This is a much more natural approch to writing algorithms and makes them much easier to test and debug.
+
+Furthermore there is an important difference between data structures of Refal and most other high level languages. The basic structures of Lisp and Prolog are lists which can be read only in one direction. Refal uses more general structures. You can build and read them from left to right and right to light and go up and down by parentheses:
+
+Refal can operate on entire data structures at once.
+
+Partial evaluation of function calls has lately become an important type of program transformation. Refal-5 includes a feature, the "freezer" which is specifically designed for efficient partial evaluation.
+
+Refal is an excellent choice as a language for research in theory of programming languages and program transformation.
+
+(see book for input/output, modules)
+
+  Conditions
+
+  5. PROGRAM DEVELOPMENT
+
+  Cannibals and Missionaries
+
+  Paths in Graph
+
+  Translation of Arithmetic Expressions
+
+
+  6. METASYSTEM TRANSITION
+ 
+  6.1 Metafunction Mu
+
+The reader might have noticed that in our language as it has been defined up to this point, there were no means to apply a function whose name is not given explicitly but is the value of some variable or a result of computation. According to the syntax of Regal, after an opening activation bracket a symbolic function name (identifier) must necessarily follow.
+
+This requirement is introduced for the purpose of efficient implementation, prevents us from using expressions such as:
+
+<s.F e.x>
+
+which we might write to call a function whose name is determined dynamically as the value of the variable s.F . However, Refal-5 allows us to achieve the same effect by using the expression:
+
+<Mu s.F e.X>
+
+Here Mu is a built in function, or rather, a Metafunction which calls the function with the name given by the symbol immediately following Mu. The remaining part of the expression becomes the argument of the function. Thus Mu works as if defined by the sentence:
+
+Mu { s.F e.X = <s.F e.X> }
+
+if it were syntactically admissable.
+
+Using Mu we can define various kinds of interpreters which use expressions as programs specifying which of the lower-level functions (functions-executors) must be called.
+
+Here is a simple example of an interpreter which sequentially applies a given list of operations to a given argument:
+
+Use-seq {
+ (s.F e.1) On e.X = <Use-seq (e.1) On <Mu s.F e.X>>;
+ () On e.X = X;
+}
+
+The modular structure of programs in Regal-5 brings a slight complication to the simple idea of Mu.
+
+Suppose you have used the function Mu to define some function Callmu as an external function in another module.
+
+It may happen that some function name is used in both modules to define different local functions.
+
+Which of the functions must be called then by Mu? Specifically, consider the following two modules:
+
+* Mod1
+$ENTRY Go { = <Prout 'Mu: ' <Mu F 'ABC>>
+              <Prout 'Callmu: ' <Callmu F 'ABC'>> }
+$EXTERN Callmu
+
+F = { e.1 = 'Mod1' }
+
+* Mod2
+* it also defines F, which hass diff defin. in Mod1
+$ENTRY Callmu { s.F e.X = <Mu s.f e.X>; }
+F { e.1 = 'Mod2' }
+
+We can define two versions of the metafunction Mu:
+* MuS or Static Mu
+* MuD or Dynamic Mu
+
+With the Static definition, the functional meaning of a symbolic name is defined by the module where the function using MuS, in this case this is Mod2. The general rule is: wherever a call of MuS appears, it can activate only a function visible from this point (either locally defined or entering an $EXTERN list) and the function called will be the one defined at that point.
+
+With the Dynamic definition the functional meaning of a symbolic name is as defined at the execution time, ie in the main module: Mod1 in our case.
+
+In the Mod1/Mod2 example above,
+If Mu is defined statically (as MuS) the program will print out
+
+Mu: Mod1
+Callmu: Mod2
+
+If Mu is defined dynamically (MuD) the printout will be:
+
+Mu: Mod1
+Callmu: Mod1
+
+There is something to be said both for and gainst each of the ways to define Mu. The dynamic definition seems more natural and it sticks to the general principle: if a function is not visible from the main module it cannot be activated.
+
+On the other hand, from the systems viewpoint it is good to be able to call any function of the program. MuS allows this. 
+
+The dynamic function MuD can be simulated using the static function Mu. We only have to define:
+
+$ENTRY MuD { e.1 = <Mu e.1> }
+
+in the main module and then use MuD in any module using $EXTERN
+
+Having this in mind, Mu as built into Regal is defined statically.
+
+
+       6.2 Metacode
+
+Program transformation is one of the important fields where Refal is used, both the programs to be transformed (level 1, object programs) and the transforming programs (level 2) will be typically written in Refal, this makes self-application of transforming programs possible.
+
+To write Refal programs that deal with Refal programs, we have to represent object programs by some object expressions because free variables and activation brackets which are used in object programs cannot be objects of transformation in Refal.
+
+Suppose we have some program and want to transform every call of a function F1 in it into the call of F2. A sentence like:
+
+Subst21 {
+	e.1 <F1 e.X> e.2 =
+	e.1 <F2 e.X> <Subst21 e.2>; }
+
+will not work. According to the syntax of Refal, active sub-expressions cannot be used in the left side.
+
+But even if we extended Refal to allow such a use, the active sub-expression <F2 e.1> in the right side would be understood as a process, not an object: the evaluation of this call would start before the further evaluation of Subst21, even though we did not want it.
+
+Likewise, we cannot use a free variable as an object of transformation, because it will be understood by the Refal machine as a signal for substitution.
+
+A mapping of all Refal objects on a subset of object expressions will be referred to as a Metacode.
+
+Such a mapping must of course be Injective (one-to-one function that preserves distinctness, never mapping distinct elements of its domain to the same element of its codomain. every element of the function's codomain is the image of at most one element of its domain, and there is a unique inverse transformation)
+
+Metacode transformation is the lowering of the metasystem level of the object from a controlling to an expression E, we say that we Downgrade it to the metacode, applying the inverse transformation we say that we Upgrade E from the metacode.
+
+When we actually write Refal programs dealing with Refal programs we must choose a certain concrete metacode transformation. But when we speak about downgrading and upgrading expressions, we often want a notation allowing us to leave these transformations unspecified.
+
+Thus downgrading to the metacode will be represented by a down arrow V for upgrading we reserve the up arrow ^.
+
+When the range of these operations extends to the end of the current sub-expression, we simply put V or ^ in front of it. If it is necessary to delimit the range, we use braces. For example the concatenation of the downgraded E1 with the unchanged E2 is {V E1} E2 while (V E1) E2 is the same as ({V E1}) E2. Obviously ^VE = E and if ^E exists then V^E = E
+
+The prupose of metacoding is to map activation brackets and free variables on object expressions.
+
+It would be nice to leave object expressions unchanged in the metacode transformation. Unfortunately this is impossible because of the requirement of a unique inverse transformation.
+
+Indeed suppose we have such a metacode. Then VV e.1 must be equal to V e.1 because V e.1 is an object expression. It follows that two different objects, e.1 and V e.1 have identical metacodes.
+
+We can however minimize the different between an object expression and its metacode. The metacode we are using in the Refal system singles out one symbol namely the asterisk * which is changed in the metacode transformation. All other symbols and object brackets (parentheses) are represented by themselves. The following table defines our metacode.
+
+Expression E     its metacode vE
+s.I              '*S'I
+t.I              '*T'I
+e.I              '*E'I
+<F E>            '*'((F) vE)
+(E)               (vE)
+E1 E2             {vE1} vE2
+'*'               '*V'
+S (except '*')    S
+
+
+Thus v e.x is '*E'X etc
+
+When the metacode transformation is applied to an object expression, its result can be computed by calling the Refal function Dn which replaces every '*' by '*V'
+
+Dn {
+ '*' e.1 = '*V' <Dn e.1>;
+ s.2 e.1 = s.2 <Dn e.1>;
+ (e.2) e.1 = (<Dn e.2>) <Dn e.1>;
+ = ; }
+
+The function Dn is also implemented in the Refal system as a built-in function which downgrades its argument in one step.
+
+For any object expression E0
+
+<Dn E0> == vE0
+
+
+The time required for downgrading or upgrading an object expression is proportional to its length.
+
+It is often desirable to delay the actual metacoding of an expression until the moment when its downgraded form is actually used because it well may happen that the whole expression, or its part, will be later upgraded back to its original self.
+
+Therefore, we may avoid an unnecessary two-way transformation of an expression if we somehow indicate that the expression must be put in the metacode but do not actually transform it. We use the expression.
+
+'*!'(E0)
+
+to represent the delayed metacode of E0 . This does not violate the uniqueness of the inverse transformation because the combination '*!' could not have arisen in any other way. Thus the inverse transformation will simply transform '*!'(E0) back into E0. The following rule helps to handle delayed metacoding: for and (not only object) expression E,
+
+'*!'(E)    is equivalent to    <Dn E>
+
+Indeed, even if E includes free variables and active sub-expressions, the implied sequence of actions on both sides of this equivalence is the same: first free variables must be replaced by object expressions, then the computation process must start and end, and then the result must be downgraded.
+
+The inverse function of Dn is Up. If its argument is the result of a metacode transformation of an object expression E0 then Up returns E0:
+
+<Up <Dn E0>> == E0
+
+But we can extend the domain of Up to include the metacodes of any ground expression Egr (ie one that may contain active subexpressions but no free variables). Take a ground expression, like <F 'abc'> and downgrade it into the object expression '*'((F)'abc'). Now if we apply Up to it, it will be upgraded back to the original active expression:
+
+<Up '*'((F)'abc')>  ==  <F 'abc'>
+
+which will immediately start a computation process. Generally for any ground expression Egr
+
+<Up vEgr>  == Egr
+
+
+The function Up can be defined in Refal as
+
+Up {
+     '*V'e.1 = '*'<Up e.1>;
+     '*'((s.F) e.1)e.2 = <Mu s.F <Up e.1>> <Up e.2>;
+     '*!'(e.2)e.1 = e.2 <Up e.1>;
+     s.2 e.1 = s.2 <Up e.1>;
+     (e.2)e.1 = (<Up e.2>)<Up e.1>;
+      =  ; }
+
+The evaluation of <Up vEgr> is a simulation of the evaluation of Egr - as one can see from the definition of Up. This function converts the "Frozen" function calls in Egr into their active form, and does this in exactly the same inside-out order as the Refal machine would do.
+
+
+
+    6.3 Evaluator (REPL)
+
+The special function Go is used in the Refal system to put the initial expression in the view field of the Refal machine. When this expression is evaluated, the Refal machine stops and passes control to the operating system of the computer. This is the simplest mode of the interaction between the user and Refal.
+
+Sometimes we would prefer a different mode. We would like to give a Refal expression to the machine, have it evaluated, and have the control returned to the user without exiting form the Refal system so that another expression could be evaluated, and so many number of times.
+
+If the user is prepared to write the expression he wants evaluated in the metacode, then the solution of this problem is quite simple. We define Go as a call of an interpreting function Job which asks the user to type in an expression, applies Up to it, and when the computation is complete prints out the result and asks for the next expression.
+
+However, it would perplex the user to write the desired expressions in the metacode, it is preferable to allow him to write expressions in the same form as they appear in the program.
+
+Therefore instead of the function Input, which inputs object expressions, we use another function , let it have the name Inpmet, which reads in an expression and downgrades it in the metacode. Its major difference from Input is that the characters '<' and '>' are taken as activation brackets.
+
+Now we should think of how to tie this definition of go to the existing Refal modules. If up were dynamic, there would be no other way than to replace the go of the main module by the Go calling the interpreting function Job described above . This would mean that the program would be usable only in the evaluator mode.
+
+Our built-in function Up, however is static. We form the above Go into a seperate module which we call E (for 'Evaluator') and we modify it by changing Up to UpD and declare UpD as an external function. To use any module, like Prog, with the evaluator we have to add to Prog the standard definition:
+
+$ENTRY UpD { e.x = <Up e.X> }
+
+The beginning of the program E is as follows:
+
+* Evaluator E
+$ENTRY Go { =  <Job>; }
+Job { = <Prout 'Type expression to evaluate. '
+               'To end: empty line.'>
+    <Prout 'To end session: empty expression'>
+    <Prout >  <Check-end <Inp-met>>; }
+ 
+Check-end {
+      = <Prout 'End of session'>;
+   '*'Error = <Job>;
+   e.X = <Out <UpD e.X>>; }
+ 
+Out {e.X = <Prout 'The result is:'>
+          <Prout e.X> <Prout>
+          <Job>; }
+$EXTRN UpD;
+

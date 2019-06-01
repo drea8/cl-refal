@@ -1,0 +1,363 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<!--Converted with LaTeX2HTML 98.2 beta6 (August 14th, 1998)original version by:  Nikos Drakos, CBLU, University of Leeds* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan* with significant contributions from:  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<html><head>
+<meta name="description" content="Dag">
+<meta name="keywords" content="Dag">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<link rel="STYLESHEET" href="metasystems_and_refal_files/dag.html">
+<link rel="next" href="http://www.refal.net/doc/turchin/dag/node2.html">
+<link rel="previous" href="http://www.refal.net/doc/turchin/dag/dag.html">
+<link rel="up" href="http://www.refal.net/doc/turchin/dag/dag.html">
+<link rel="next" href="http://www.refal.net/doc/turchin/dag/node2.html">
+<title>Introduction</title>
+</head>
+
+<body bgcolor="#FBFBFF">
+<!--Navigation Panel-->
+<a name="tex2html31" href="http://www.refal.net/doc/turchin/dag/node2.html">
+
+</a><p><a name="tex2html31" href="http://www.refal.net/doc/turchin/dag/node2.html"></a><a href="http://www.refal.net/doc/turchin/dag/dag.html#CONTENTS"><small>Contents<!--End of Navigation Panel--> </small></a><!--End of Navigation Panel--> <br>
+<a name="SECTION00010000000000000000"></a><a name="history"></a> <br>
+<font color="#CC0066"><big><big><big>1. Introduction</big></big></big></font></p>
+
+<p>Consider a system <i>S</i> of any kind. Suppose that there is a way to make some number
+of copies of it, possibly with variations. Suppose that these systems are united into a
+new system <i>S</i>' which has the systems of the <i>S</i> type as its subsystems, and
+includes also an additional mechanism which somehow examines, controls, modifies and
+reproduces the <i>S</i>-subsystems. Then we call <i>S</i>' a <em>metasystem</em> with
+respect to <i>S</i>, and the creation of <i>S</i>' a <em>metasystem transition</em>. As a
+result of consecutive metasystem transitions a multilevel hierarchy of control arises,
+which exhibits complicated forms of behavior. In my book <em>The Phenomenon of Science: a
+Cybernetic Approach to Evolution</em> [<a href="http://www.refal.net/doc/turchin/dag/node13.html#Tur77">39</a>] I have
+interpreted the major steps in biological and cultural evolution, including the emergence
+of the thinking human being, as nothing else but metasystem transitions on a large scale.
+Even though my Ph.D. was in theoretical physics, I was so excited about my new cybernetic
+ideas that I shifted from physics to computer science and left the atomic center in
+Obninsk for the Institute for Applied Mathematics in Moscow. An extra-scientific factor
+came into play in the late 1960s: I became an active member of the human rights movement.
+My book was written about 1970, but it could not be published in the Soviet Union solely
+because of the author's name. It took seven years to smuggle it to the West and have it
+published in the English language. The first step towards MST in computers was to design
+an appropriate algorithmic language. I called the first version of such a language <em>meta-algorithmic</em>
+[<a href="http://www.refal.net/doc/turchin/dag/node13.html#Tur66">36</a>], since it was supposed to serve as a metalanguage for
+defining semantics of algorithmic languages. Then I simplified it into what was named
+REFAL (for REcursive Functions Algorithmic Language). Refal was conceived as the universal
+language of metasystem hierarchies, which is, on one hand, simple enough, so that the
+machine that executes programs in this language (the <em>Refal machine</em>) could become
+an object of theoretical analysis -- and, on the other hand, is rich enough to serve as a
+programming language for writing real-life algorithms, unlike such purely theoretical
+languages as the language of the Turing machine or Markov's normal algorithms (the latter,
+by the way, was one of the sources of Refal). Even to this day Refal remains, in my
+(biassed, no doubt) view, the most successful compromise between these two requirements.
+An efficient interpreter for Refal was first written in 1968 [<a href="http://www.refal.net/doc/turchin/dag/node13.html#OFT68">26</a>].
+At that time Refal was very different from other languages, being a purely functional
+language with built-in pattern-matching. Now that functional languages are common place, I
+need only to summarize Refal's distinctive features to make it familiar to the reader. The
+most distinctive feature of Refal is its data domain. Refal uses <em>expressions</em> for
+symbol manipulation, not <em>lists</em> (skewed binary trees). Refal expressions can be
+seen as trees with arbitrary (unfixed) arity of nodes, or sequences of such trees. They
+are formally defined as: </p>
+
+<table width="80%" cellspacing="0" cellpadding="0" border="0">
+  <tbody><tr>
+    <td width="3%"></td>
+    <td width="93%"><em>term ::= symbol | variable | (expression) | &lt;function
+    expression&gt;</em></td>
+    <td width="4%"></td>
+  </tr>
+  <tr>
+    <td width="3%"></td>
+    <td width="93%"><em>expression ::= empty | term expression</em></td>
+    <td width="4%"></td>
+  </tr>
+</tbody></table>
+
+<p><br>
+Variables in Refal have their intrinsic types shown by a prefix e.g., <tt>s.1, t.2, e.x</tt>.
+Thus an <em>s-variable</em> <tt>s.<i>i</i></tt>, where <i>i</i> is the index (name),
+stands for an arbitrary symbol, a <em>t-variable</em> <tt>t.<i>i</i></tt> - for an
+arbitrary term, and an <em>e-variable</em> <tt>e.<i>i</i></tt> - for any expression. In
+the case of an <i>e</i>-variable, the prefix may be dropped: <tt>x</tt> is the same as <tt>e.x</tt>.
+We use angular brackets to form function calls: <tt>&lt;<i>f</i> <i>x</i>&gt;</tt>. A
+program in Refal is a sequence of mutually recursive <em>sentences</em> (rewrite rules)
+which are tried in the order they are written. Here is an example of a function <tt>f</tt>
+which traverses its argument from left to right and replaces every <tt>'a'</tt> by <tt>'b'</tt>:
+</p>
+
+<table width="60%" cellspacing="0" cellpadding="0" border="0">
+  <tbody><tr>
+    <td width="95%"><strong><tt>&lt;f 'a'&gt; = 'b'&lt;f x&gt;</tt></strong></td>
+    <td width="5%"></td>
+  </tr>
+  <tr>
+    <td width="95%"><strong><tt>&lt;f s.1 x&gt; = s.1 &lt;f x&gt;</tt></strong></td>
+    <td width="5%"></td>
+  </tr>
+  <tr>
+    <td width="95%"><strong><tt>&lt;f &gt; = </tt></strong></td>
+    <td width="5%"></td>
+  </tr>
+</tbody></table>
+
+<p><br>
+<tt>&nbsp; </tt>By the year 1970 I was lucky to have gathered a circle of young people,
+the Refal group, which met regularly, survived my emigration and is still alive and well.
+As in any informal group, some people went, new people came. I am deeply thankful to all
+of them, and especially to those most active and persistent: Sergei Romanenko (the first
+to have come), Nikolai Kondratiev, Elena Travkina, Andrei Klimov, Arkadi Klimov, Viktor
+Kistlerov, Igor Shchenkov, Sergei Abramov, Alexei Vedenov, Ruten Gurin, Leonid Provorov,
+Andrei Nemytykh, Vika Pinchuk. I will always remember Alexander Romanenko who died before
+his time in 1993.</p>
+
+<p>Together with a smaller group at the Moscow Engineering and Physics Institute
+(Stanislav Florentsev, Alexander Krasovsky, Vladimir Khoroshevsky) we made Refal compilers
+for the most popular machines in the Soviet Union, and Refal became pretty well known in
+that part of the world (a bibliography on the development and use of Refal compiled a few
+years ago includes about 200 items). It is not my intention here to focus on Refal, but I
+want to mention two further outgrowths of Refal: The language FLAC for algebraic
+manipulation developed by V.Kistlerov [<a href="http://www.refal.net/doc/turchin/dag/node13.html#Kis87">22</a>,<a href="http://www.refal.net/doc/turchin/dag/node13.html#Chm90">4</a>], and Refal Plus by Sergei Romanenko and Ruten Gurin [<a href="http://www.refal.net/doc/turchin/dag/node13.html#GuR91">17</a>], which is a kind of logical closure of the ideas on which
+Refal is based. In my later work I used the extended version of Refal named Refal-5 [<a href="http://www.refal.net/doc/turchin/dag/node13.html#Tur89">44</a>], which is operational under DOS and UNIX. </p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The next conceptual station after fixing the
+language was <em>driving</em> [<a href="http://www.refal.net/doc/turchin/dag/node13.html#Tur71">37</a>,<a href="http://www.refal.net/doc/turchin/dag/node13.html#Tur72">38</a>]. Suppose we have the call <tt>&lt;f 'a'x&gt;</tt> of the
+function <tt>f</tt> above. Obviously, it can be replaced by <tt>'b'&lt;f x&gt;</tt>,
+because this is what the Refal machine will do in one step of function evaluation. <em>Partial
+evaluation</em> took place, which is a simple case of driving. Now take the call <tt>&lt;f
+x&gt;</tt> where a partial evaluator has nothing to do. Driving, however, is still
+possible, because it is simulation of one step of computation in any circumstances. When
+we see equivalent transformation of programs as the use of some equations, our partial
+evaluation is the use of the equation <tt>&lt;f 'a'x&gt; ='b'&lt;f&nbsp;x&gt;</tt>, and
+this makes perfect sense. But, given the call <tt>&lt;f&nbsp;x&gt;</tt>, there is no
+equation in sight that would improve the program. Driving is a product of cybernetic
+thinking. We create a metamachine, and the first thing it must be able to do with the
+Refal machine is to simulate its behavior. Thus, the metamachine <em>drives</em> the Refal
+machine, forcing it to do something for which it was not originally prepared: make
+computation over expressions with free variables. Such computation should better be called
+<em>metacomputation</em>; its result is not the value of the function, but a graph of
+states and transitions of the Refal machine which describes one step of computation
+towards that value. In our case driving will produce the graph: </p>
+
+<table width="60%" cellspacing="0" cellpadding="0" border="0">
+  <tbody><tr>
+    <td width="6%"></td>
+    <td width="94%"><tt><strong>[1]&lt;f x&gt; x:</strong>'<strong>a'x;&nbsp;[2]</strong>'<strong>b'&lt;f
+    x&gt;</strong></tt></td>
+  </tr>
+  <tr>
+    <td width="6%"></td>
+    <td width="94%"><strong><tt>+ x:s.1 x;&nbsp;[3] s.1&nbsp;&lt;f x&gt;</tt></strong></td>
+  </tr>
+  <tr>
+    <td width="6%"></td>
+    <td width="94%"><strong><tt>+ x:[];&nbsp;[] </tt></strong></td>
+  </tr>
+</tbody></table>
+
+<p><br>
+where the original call is the root node labeled by <tt>[1]</tt>, and there are three
+edges, separated by <tt>+</tt>, which lead to three resulting expressions, according to
+the three cases (sentences) in the definition of <tt>f</tt>. By <i>e</i>:<i>p</i> we
+denote the operation of matching expression <i>e</i> to pattern <i>p</i>; a pattern is a
+special kind of an expression (referred to as <em>rigid</em>), which guarantees the
+uniqueness of the operation. An expression <i>E</i> is rigid if (1) only s-variables may
+enter <i>E</i> more than once, and (2) no subexpression of <i>E</i> (inlcuding <i>E</i>
+itself) includes two e-variables separated by an expression. <tt>[]</tt> stands for an
+empty expression for readability. </p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp; From driving I came to supercompilation (SCP for short). Let
+me briefly describe this technique of program transformation, leaving aside many details
+and variations. A supercompiler is an upgrade of a driver. While driving describes one
+step of the Refal machine, supercompilation may include any number of steps. When a new <em>active</em>
+(i.e., representing a function call) node <i>C</i> appears in driving, the supercompiler
+examines its ancestors and with regard to each ancestor <i>C</i>' takes one of the three
+decisions: 
+
+</p><dl compact="compact">
+  <table width="80%" cellspacing="0" cellpadding="0" border="0">
+    <tbody><tr>
+      <td width="93%">1.&nbsp;&nbsp;&nbsp;&nbsp; Reduce <i>C</i> to <i>C</i>' with a
+      substitution; this can be done only if</td>
+      <td width="7%">&nbsp;<img src="metasystems_and_refal_files/img7.html" alt="img7.gif (308 bytes)" width="55" height="31"></td>
+    </tr>
+  </tbody></table>
+  <dt>2. </dt>
+  <dd>Generalize <i>C</i> and <i>C</i>', i.e., find such <i>C<sup>g</sup></i> that <img src="metasystems_and_refal_files/img7.html" alt="$C\subseteq C^g$" width="55" height="31" border="0" align="MIDDLE"> and <img src="metasystems_and_refal_files/img8.html" alt="$C'\subseteq C^g$" width="58" height="29" border="0" align="MIDDLE">; then erase the driving subtree which
+    starts at <i>C</i>', reduce <i>C</i>' to <i>C<sup>g</sup></i> and go on driving <i>C<sup>g</sup></i>.
+  </dd>
+  <dt>&nbsp;</dt>
+  <dt>3. </dt>
+  <dd>Do nothing on <i>C</i>' (the nodes <i>C</i> and <i>C</i>' are "far from each
+    other"), and examine the next ancestor. If there are no more ancestors to loop back
+    to, go on driving <i>C</i>. </dd>
+</dl>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Supercompilation ends when the graph becomes
+self-sufficient i.e., it shows, for every active node, how to make a transition to the
+next node which corresponds to at least one step of the Refal machine. This graph is a
+program for computing the function call represented by the initial node. </p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp; Note the difference between the principle of supercompilation
+and the usual idea of program transformation, where the program is changed step by step by
+applying some equivalences. In supercompilation we never change the original program. We
+regard it as a sort of "laws of nature" and construct a model of a computation
+process governed by these laws. When the model becomes self-sufficient, we simply throw
+away the unchanged original program. I see supercompilation as a computer implementation
+of the general principle of human knowledge, which, in my view, is the search for such
+generalized states in terms of which we can construct a self-sufficient model of some part
+of the world. </p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp; When we discussed supercompilation in the seminars of the
+Refal group, I always stressed my belief that metasystem transition is important in
+itself. If indeed it has been the key at all stages of biological and technical evolution,
+how can we hope to create really intelligent machines without the use of this principle?
+We should develop techniques of dealing with repeated metasystem transitions; applications
+are bound to follow.</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp; The first confirmation of this belief came when I figured out
+that supercompilation of an interpreter is compilation, and supercompilation of the
+supercompiler that does compilation (second MST) yields a compiled (efficient) compiler.
+Moreover, making the third MST we can obtain a compiled compiler generator. I was very
+excited about my discovery, and told Andrei Ershov about it. Ershov at that time worked on
+partial evaluation - the first MST - but he did not know about the second MST, and he also
+got excited (Ershov describes our meeting in detail in his 1987 keynote speech [<a href="http://www.refal.net/doc/turchin/dag/node13.html#Ers88">8</a>]). Neither he, nor I knew at that time that Yoshihiko
+Futamura [<a href="http://www.refal.net/doc/turchin/dag/node13.html#Fut71">9</a>] made this discovery a few years before me.
+Ershov saw a reference to Futamura's paper, but could not get the journal. In his big
+paper [<a href="http://www.refal.net/doc/turchin/dag/node13.html#Ers77">7</a>] he referred to my result as "Turchin's
+theorem of double driving". </p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp; That was in 1976. Since 1974 I had been jobless, home-searched
+and periodically interrogated by the KGB. Meanwile a book on Refal and its implementation
+was written by several members of the Refal group, including myself [<a href="http://www.refal.net/doc/turchin/dag/node13.html#Bas77">3</a>]. My friends managed to get permission for publishing it as
+a technical material of the institute where I worked before being fired - on the condition
+that I do not figure in the list of authors. To meet this requirement they decided not to
+mention any authors at all. The book was thus published anonymously. But I smuggled into
+it a few pages about my results on automatic production of compilers. </p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp; I emigrated in 1977, and it took some time to take roots in
+the new environment: a process which can never be fully successful. For a year and a half
+I stayed at the Courant Institute of NYU and used this time to write a 250 pages report [<a href="http://www.refal.net/doc/turchin/dag/node13.html#Tur80">40</a>], where I summarized the ideas and results of the past
+years and also sketched some new ideas to turn to them later. Then I got a position at the
+City College of the City University of New York. </p>
+
+<p>&nbsp;&nbsp;&nbsp; I wrote the first supercompiler (SCP-1) in 1981-82 [<a href="http://www.refal.net/doc/turchin/dag/node13.html#TNT82">41</a>] with the help of Bob Nirenberg and my son Dimitri in
+carrying over the implementation of Refal from Russia to the US and upgrading it. &nbsp;
+From the examples in [<a href="http://www.refal.net/doc/turchin/dag/node13.html#TNT82">41</a>] one could see that
+supercompilation includes, but is much stronger as a transformation technique than partial
+evaluation (which takes place automatically in driving). The examples in [<a href="http://www.refal.net/doc/turchin/dag/node13.html#TNT82">41</a>] included program specialization, but when I tried
+self-application (2nd MST), I met a dozen of technical difficulties. </p>
+
+<p>&nbsp;&nbsp;&nbsp; Partial evaluation is simpler then supercompilation, so automatic
+generation of a compiler from an interpreter was first achieved by self-application of a
+partial evaluator (2nd and 3rd MST). This was done by Neil Jones and co-workers at DIKU,
+Copenhagen [<a href="http://www.refal.net/doc/turchin/dag/node13.html#Jon85">18</a>,<a href="http://www.refal.net/doc/turchin/dag/node13.html#Ses86">27</a>,<a href="http://www.refal.net/doc/turchin/dag/node13.html#Jon88">19</a>,<a href="http://www.refal.net/doc/turchin/dag/node13.html#Jon89">20</a>], and was an important
+step forward and a great success. Self-applicable partial evaluation became an established
+field of research. Of the members of the Moscow Refal group, Sergei Romanenko and Andrei
+Klimov contributed to this field [<a href="http://www.refal.net/doc/turchin/dag/node13.html#KRo87">23</a>,<a href="http://www.refal.net/doc/turchin/dag/node13.html#Rom88">30</a>,<a href="http://www.refal.net/doc/turchin/dag/node13.html#Rom90">31</a>], but I decided to
+concentrate on further development of techniques of supercompilation, and wrote a stronger
+and better supercompiler, SCP-2.</p>
+
+<p>&nbsp;&nbsp;&nbsp; The fall semester of 1985 I spent at DIKU in Copenhagen invited by
+Neil Jones. This was a very important visit for me. I got a chance to discuss in detail my
+ideas on MST and SCP with Neil and other people at DIKU. Among other things, these
+discussions helped me to finalize and have published my paper on supercompilation [<a href="http://www.refal.net/doc/turchin/dag/node13.html#Tur86">42</a>]. Since then I visited DIKU on several occasions and
+always had useful discussions and enjoyed the friendly atmosphere there. </p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp; In 1988-89 Robert Glück, then at the Vienna Technical
+University, joined the MST-SCP Project. He spent a year and a half at the City College
+working with me on its various aspects. We managed to achieve self-application of SCP-2 in
+some simple cases, but it became clear that a thorough overhaul of the supercompiler is
+needed. After returning to Europe, Glück carried over the techniques of metacoding and
+doing MSTs, which was originally developed for the Refal supercompiler, to partial
+evaluation and list-based languages. In the early work on partial evaluation by N.Jones
+with co-workers [<a href="http://www.refal.net/doc/turchin/dag/node13.html#Jon89">20</a>] it was stated that in order to
+achieve good results in self-application, a preliminary binding time analysis
+(``off-line'') was necessary. However, Glück showed ([<a href="http://www.refal.net/doc/turchin/dag/node13.html#Glu91">12</a>])
+that with a correct use of metacoding, partial evaluation is self-applicable without any
+binding time analysis: ``on line''. </p>
+
+<p>&nbsp;&nbsp;&nbsp; Little by little, more people got involved in the work on MST+SCP.
+The Moscow Refal group has never ceased discussing and working on these ideas, but now
+their work began being published in English. Andrei Klimov found a mate in Robert Glück [<a href="http://www.refal.net/doc/turchin/dag/node13.html#GlK93">14</a>,<a href="http://www.refal.net/doc/turchin/dag/node13.html#GlK94">15</a>,<a href="http://www.refal.net/doc/turchin/dag/node13.html#GlK95">16</a>]; their paper [<a href="http://www.refal.net/doc/turchin/dag/node13.html#GlK93">14</a>] helped
+arouse interest towards supercompilation in the partial evaluation community by bridging
+the two methods. Alexander Romanenko started work on function inversion [<a href="http://www.refal.net/doc/turchin/dag/node13.html#ARo88">28</a>,<a href="http://www.refal.net/doc/turchin/dag/node13.html#ARo91">29</a>]. Sergei Abramov did an
+excellent and potentially very important work [<a href="http://www.refal.net/doc/turchin/dag/node13.html#Abr93">1</a>] on
+program testing on the basis of <em>driving with a neighborhood</em> (see Sec.<a href="http://www.refal.net/doc/turchin/dag/node11.html#neighborhood">3.3</a>), and wrote a monograph on metacomputation other
+than supercompilation, [<a href="http://www.refal.net/doc/turchin/dag/node13.html#Abr95">2</a>] (it is still in Russian,
+though). </p>
+
+<p>&nbsp;&nbsp;&nbsp; Neil Jones [<a href="http://www.refal.net/doc/turchin/dag/node13.html#Jon94">21</a>] gave a thorough
+theoretical analysis of driving as compared to partial evaluation. More papers on
+supercompilation have appeared recently from DIKU [<a href="http://www.refal.net/doc/turchin/dag/node13.html#GlJ94">13</a>,<a href="http://www.refal.net/doc/turchin/dag/node13.html#Soe94">32</a>,<a href="http://www.refal.net/doc/turchin/dag/node13.html#SoG95">33</a>,<a href="http://www.refal.net/doc/turchin/dag/node13.html#SGJ94a">34</a>,<a href="http://www.refal.net/doc/turchin/dag/node13.html#SGJ94b">35</a>]. The role of Glück
+in that, as one can see from the references, has been of primary importance. </p>
+
+<p>&nbsp;&nbsp;&nbsp; Morten Sørensen wrote a Master thesis on supercompilation [<a href="http://www.refal.net/doc/turchin/dag/node13.html#Soe94">32</a>]. Its title, <em>Turchin's Supercompiler Revisited</em>,
+symbolized the emerging interest to my work. Later Sørensen made a suggestion that the
+Higman-Kruskal theorem on homeomorphic embedding be used as the criterion for
+generalization in supercompilation [<a href="http://www.refal.net/doc/turchin/dag/node13.html#SoG95">33</a>], which probably
+will be judged as one of the most important contributions to the SCP techniques during the
+last few years; I discuss it in more detail in Sec.<a href="http://www.refal.net/doc/turchin/dag/node4.html#generalization">2.2</a>.
+</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp; In 1993 I decided to restrict Refal as the object language of
+SCP to its <em>flat</em> subset where the right side of a sentence cannot include nested
+function calls: it is either a passive expression, or a single function call. The purpose,
+of course, was to simplify the supercompiler for self-application to become possible. I
+started writing such a supercompiler, SCP-3. In September 1993 Andrei Nemytykh from the
+Programming Systems Institute (Pereslavl, Russia), came to CCNY for an academic year under
+a grant from the National Research Council. Working together, we have, at long last, made
+SCP-3 self-applicable [<a href="http://www.refal.net/doc/turchin/dag/node13.html#TuN95a">46</a>,<a href="http://www.refal.net/doc/turchin/dag/node13.html#TuN95b">47</a>].
+That was in the spring of 1994. Returning to Russia, Nemytykh continued the work on SCP-3
+with Vika Pinchuk. I do not speak more on this because SCP-3 with some examples of its
+performance is presented in a separate paper at this symposium [<a href="http://www.refal.net/doc/turchin/dag/node13.html#NPT96">25</a>]. </p>
+
+<p>&nbsp;&nbsp;&nbsp; In the summer of 1993 Futamura invited me to spend a month in Tokyo
+to discuss supercompilation in relation to his concept of <em>generalized partial
+computation</em> [<a href="http://www.refal.net/doc/turchin/dag/node13.html#Fut88">10</a>,<a href="http://www.refal.net/doc/turchin/dag/node13.html#Fut91">11</a>].
+There are common aspects, indeed. In both approaches the information about the states of a
+computing machine goes beyond listing the values of some variables. The main difference is
+that Futamura relies on some unspecified theorem proving, while my point is to do
+everything by supercompilation, including theorem proving. </p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp; In July 1995, invited by José Meseguer, I spent a pleasant
+week at Stanford Research Institute in California explaining and discussing the details of
+SCP and MST. Meseguer and his graduate student Manuel Clavel are working on reflective
+logics and languages in the frame of Meseguer's theory of general logics [<a href="http://www.refal.net/doc/turchin/dag/node13.html#Mes89">24</a>,<a href="http://www.refal.net/doc/turchin/dag/node13.html#Cla96">5</a>]. They set a goal of
+extending the techniques of supercompilation to their systems in order to improve their
+efficiency, and I know that they have already made some progress along this path. </p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp; My review of events and ideas concerning MST and SCP is, no
+doubt, incomplete, and so is my bibliography. I ask for forgiveness in advance. </p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp; In Sec.2&nbsp; I discuss a few important aspects of
+supercompilation. In Sec.3 I give an outline of a few ideas which have not yet been
+properly translated into computer programs. My exposition is very informal and sketchy. I
+try to do it through a few simple examples. The field of MST+SCP has its own formalism,
+which I, obviously, cannot systematically present here. Yet I hope that the reader
+unfamiliar with it will still be able to figure out what it is all about, without going
+into formal details. </p>
+
+<p>&nbsp;&nbsp;&nbsp; A word on terminology. In 1987 I suggested <em>metacomputation</em>
+as an umbrella term covering all computations which include at least one metasystem
+transition. By this definition, partial evaluation is also a variety of metacomputation,
+and the term could be used for identifying such meetings as this seminar. However, partial
+evaluation people have been in no hurry to use it. In contrast, it is readily used by
+people in the field I denote in this paper as MST plus SCP (sounds barbarian, of course).
+Thus, for the time being, at least, </p>
+<div align="center"><center>
+
+<table width="60%" cellspacing="0" cellpadding="0" border="0">
+  <tbody><tr>
+    <td width="100%"><p align="center"><big><em>metacomputation&nbsp; = MST + SCP</em></big></p></td>
+  </tr>
+</tbody></table>
+</center></div>
+
+<hr>
+<!--Navigation Panel-->
+
+<p><a href="http://www.refal.net/doc/turchin/dag/dag.html#CONTENTS"><small>Contents<!--End of Navigation Panel--> </small></a>&nbsp;<!--End of Navigation Panel--> <small><a href="http://www.refal.net/doc/turchin/dag/node3.html">Next</a></small></p>
+
+
+</body></html>

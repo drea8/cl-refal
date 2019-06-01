@@ -8,6 +8,5 @@ REFAL was a 1968 pattern-matching functional programming language invented by Ru
 * compiler and automata runtime modeler
 
 # Documentation
-* see CL-Refal tutorials in doc/
 * see test/ for examples
 
