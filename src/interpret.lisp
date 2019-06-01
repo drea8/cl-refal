@@ -58,6 +58,10 @@
   ((1 0) (binadd 0 1))
   ((1 1) 10))
 
+;; and would be called like
+
+'(binadd 0 0)
+
 ;; from the Refal source material by Valentin Turchin
 
 "Refal Function Execution	  
@@ -355,7 +359,19 @@ We need to clarify the process of Refal function execution now.
 '(e.Eq e.Eq)
 ;; is an expression with even length, which can be divided into two identifical halves 'ABCABC' or '8888' or the empty expression (divides into two empty ones)
 
+;; So with our Refal expression syntax space defined, let's translate
+;; the definition into a Common Lisp left match predicate function
+
 (defun refal-left-match (x cell)
   )
 
+
+
+;; Advanced CL Refal Extensions
 ;;
+
+;; Infinite Refal Sentences
+
+;; Non-Flat Structure Matching
+
+;; Refal Pattern Matching morphogenesis
