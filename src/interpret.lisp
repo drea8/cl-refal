@@ -160,7 +160,8 @@
 ;; Because getting into formal modeling merits the discussion
 ;; of Performance optimization.
 
-;; We have not fully implemented Turchin's original REFAL
+;; Before doing so we need to implement the full REFAL syntax,
+;; as we have not fully implemented Turchin's original REFAL
 ;; with string expression and tree matching term expressions,
 ;; and his other included functions in the Refal standard library.
 
@@ -181,6 +182,31 @@
 ;; Let's include the dynamic symbol pattern matching utility Turchin had
 ;; in the original Refal pattern matcher object function
 
+;; CELL values like
+
+'(("A" s.a) s.a))
+
+;; which on X of "Aardvark" would be like "ardvark"
+
+;; expanding the above expr '(("A" s.a) s.a)
+;; is the automated equivalent of what would be produced
+;; if we could manually write every
+
+'(("A" s.[0]) s.[0])
+  ("A" s.[1]) s.[1]) ;; ... etc
+)
+
+;; term that could be expanded by
+;; the s. set
+
+;; s.a delineates a Variable Determinate, The a variable
+;; s.b would be a similar dynamic matcher disjunct and on the b variable
+
+'((s,a " " s.b) (s.a s.b))
+
+;; on "a b" return '(a b)
+;; on "1 2" return '(1 2)
+
 ;; let us remember the format of the original cell pattern matching function:
 ;; (DEFUN BASIC-LEFT-MATCH (X CELL) (EQUAL (FIRST CELL) X))
 
@@ -189,12 +215,11 @@
 ;; in the binary addition CELL would be like
 ;; '(0 1) or '(1 0) or '(00 01)
 
-;; we want to process CELL values like
-;; '(("A" s.a) s.a)
-;; which on X of "Aardvark" would be like "ardvark"
 
 ;; We should define the full grammar of Refal expressions from
 ;; Turchin's own specifications, hierichally if conveniently possible.
+
+;; see /doc/ for Refal function reference
 
 (defun refal-left-match (x cell)
   )
