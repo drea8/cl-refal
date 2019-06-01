@@ -7,6 +7,13 @@
 ;; for his research in physics, automata, natural language translation,
 ;; artificial intelligence, and complexity theory.
 
+;; Turchin's take on expressing mathematic, logical, and lingustic relations in a
+;; simple Sentence term notation is extremely useful and insightful
+;; as an exercise in programming language design and information theory
+;; in general. The possible extensions for Refal pattern spaces as
+;; say semigroups or topological structures is obvious as one
+;; implements Refal in a homoiconic language like Lisp.
+
 ;; Refal is described thusly on wikipedia in 2019,
 ;; "The basic data structure of Lisp and Prolog is a linear list built by cons operation in a sequential manner, thus with O(n) access to list's nth element...
 
