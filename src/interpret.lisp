@@ -221,6 +221,61 @@
 
 ;; see /doc/ for Refal function reference
 
+;; Here is the Refal grammar;
+
+;; the default operation is list concatenation!
+
+;; lets start with flat strings,
+;; then later work on Structure Brackets
+;; (non flat structures), later graphs and
+;; paradiscrete structures
+
+'(s.1 s.2 s.3)
+;; term forms any three symbols like
+;; 'ABC'
+
+;; term pair
+'((s.1 s.2 s.3) (s.3 s.2))
+;; returns 'CB' from INPUT 'ABC'
+
+'(s.A s.A s.A)
+;; term repairs any three identical symbols like '666' or 'www'
+
+'((s.A s.A s.A) s.A)
+;; from 'www' returns 'w'
+
+
+'(s.Edge s.Middle s.Edge)
+;;- first and last must match, ie 'kek' or '^_^'
+
+'((s.Edge e s.Edge) s.Edge)
+;; on INPUT 'lel' returns l
+;; otherwise pass
+
+					;*
+'(s.first e.middle s.last)
+;; any expression containing at least two symbols
+;; e.middle could be a further string, in this case procedurally the first and last characters of the list input buffer are first checked (as a type), a Refal Pattern Type
+;; e. expressions can also null, for above the middle e.middle can be nulle so ++ or -+ is valid for s.first and s.last values
+;; non-abbreviated symbols and strs are literal like
+
+'(s.first 'bc') ;; matches any string starting with s.first and terminating with 2 chars bc
+
+'(e.Eq e.Eq)
+;; is an expression with even length, which can be divided into two identifical halves 'ABCABC' or '8888' or the empty expression (divides into two empty ones)
+
+;; from the Refal source material by Valentin Turchin
+
+"Refal Function Execution	  
+
+We need to clarify the process of Refal function execution now.
+
+1. A sentence is elected from the left side Patterns for which you can get a function argument by changing the variables in it to some values. If no such Sentence exists, then the program ends with an error of recognition impossible
+
+2. The variables values are fixed when they request to the function argument when they are placed in the left part of the selected sentence, if there are several such sets of variables values (permutations), then its fixed the one in which the leftmost e-variable takes the shortest value. If it does not resolve ambiguities, then the next e-variable is considered and so on.
+
+3. The variables are replaced by their values in the right side of the selected sentence. Then the functions on the right are calculated."
+
 (defun refal-left-match (x cell)
   )
 
