@@ -14,6 +14,17 @@
 ;; say semigroups or topological structures is obvious as one
 ;; implements Refal in a homoiconic language like Lisp.
 
+;; Studying Refal in one respect one is exploring
+;; Automata theory heavily, but on the other hand much of what
+;; makes Refal unique is the Refal machine reader which relates more
+;; to information representation theories of data structures
+;; moreso than parsing automata like regular expressions, and
+;; in constructing optimized Refal compilers you end up
+;; writing automata around traversal of the data spaces rather than
+;; beginning with the automata as a runtime in its own right
+;; due to the "non-flat" possibility space of data structures
+;; readable by Refal-like languages.
+
 ;; Refal is described thusly on wikipedia in 2019,
 ;; "The basic data structure of Lisp and Prolog is a linear list built by cons operation in a sequential manner, thus with O(n) access to list's nth element...
 
