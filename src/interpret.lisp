@@ -61,7 +61,7 @@
 
 ;; Introduction to Refal
 
-;; A Refal program is a recursive List (or set thereof)
+;; A Refal program expression is a recursive graph
 ;; of Sentences, formed by Left and Right terms
 ;; that forms a Function mapping from Predicates
 ;; satisfies on the Left to results returned by their
