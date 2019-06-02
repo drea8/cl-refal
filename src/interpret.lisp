@@ -190,7 +190,7 @@ We need to clarify the process of Refal function execution now.
 (lambda (input patterns)
   (loop for i in patterns ;; this Loop control structure/invariant,
      if (equal (first i) input) ;; this predicate match.
-     return (second i)) ) ;; and this return structure are important
+a     return (second i)) ) ;; and this return structure are important
 
 ;; What is happening here?
 
@@ -349,7 +349,7 @@ We need to clarify the process of Refal function execution now.
 ;; returns 'CB' from INPUT 'ABC'
 
 '(s.A s.A s.A)
-;; term repairs any three identical symbols like '666' or 'www'
+;; term returns any three identical symbols like '666' or 'www'
 
 '((s.A s.A s.A) s.A)
 ;; from 'www' returns 'w'
@@ -374,7 +374,7 @@ We need to clarify the process of Refal function execution now.
 ;; "who is the master that makes the grass green" etc
 
 '((s.Edge e s.Edge) s.Edge)
-;; with INPUT '404' returns '4'
+;; with INPUTs '404' or '4ab4' returns '4'
 
 					
 '(s.first e.middle s.last)
