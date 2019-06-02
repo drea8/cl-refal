@@ -223,7 +223,9 @@ We need to clarify the process of Refal function execution now.
  '((Symbol No)
    (Number Yes)))
 
-;; This gives us the beginnings of a naive type system
+;; This gives us the beginnings of a naive type system...
+;; though the observant reader would note the explicit domain and codomains
+;; of Refal Sentence term blocks define a strict type for functions at read time.
 
 ;; At this point we should really talk about runtimes.
 ;; Because getting into formal modeling merits the discussion
