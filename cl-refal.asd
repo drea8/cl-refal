@@ -5,4 +5,4 @@
     :serial t
     :depends-on ()
     :components ((:file "package")
-(:file "src/interpet.lisp")))
+(:file "src/interpret")))

@@ -190,7 +190,7 @@ We need to clarify the process of Refal function execution now.
 (lambda (input patterns)
   (loop for i in patterns ;; this Loop control structure/invariant,
      if (equal (first i) input) ;; this predicate match.
-a     return (second i)) ) ;; and this return structure are important
+     return (second i)) ) ;; and this return structure are important
 
 ;; What is happening here?
 
@@ -296,7 +296,8 @@ a     return (second i)) ) ;; and this return structure are important
 
 ;; CELL values like
 
-'(("A" s.a) s.a))
+'(("A" s.a) s.a)
+
 
 ;; which on X of "Aardvark" would be like "ardvark"
 
@@ -304,8 +305,8 @@ a     return (second i)) ) ;; and this return structure are important
 ;; is the automated equivalent of what would be produced
 ;; if we could manually write every
 
-'(("A" s.[0]) s.[0])
-  ("A" s.[1]) s.[1]) ;; ... etc
+'((("A" s.0) s.0)
+  (("A" s.1) s.1) ;; ... etc
 )
 
 ;; term that could be expanded by
@@ -314,7 +315,7 @@ a     return (second i)) ) ;; and this return structure are important
 ;; s.a delineates a Variable Determinate, The a variable
 ;; s.b would be a similar dynamic matcher disjunct and on the b variable
 
-'((s,a " " s.b) (s.a s.b))
+'((s.a " " s.b) (s.a s.b))
 
 ;; on "a b" return '(a b)
 ;; on "1 2" return '(1 2)
@@ -386,7 +387,7 @@ a     return (second i)) ) ;; and this return structure are important
 ;; e. expressions can also null, for above the middle e.middle can be nulle so ++ or -+ is valid for s.first and s.last values
 ;; non-abbreviated symbols and strs are literal like
 
-'(s.first 'bc') ;; matches any string starting with s.first and terminating with 2 chars bc
+'(s.first 'bc) ;; matches any string starting with s.first and terminating with 2 chars bc
 
 '(e.Eq e.Eq)
 ;; is an expression with even length, which can be divided into two identifical halves 'ABCABC' or '8888' or the empty expression (divides into two empty ones)
