@@ -413,3 +413,25 @@ We need to clarify the process of Refal function execution now.
 ;; Non-Flat Structure Matching
 
 ;; Refal Pattern Matcher and Compiler Morphogenesis
+
+;; CL Refal File Loader
+
+
+(defun cl-refal-defun (refal-sexp)
+  (let ((fun-name (first refal-sexp))
+	(fun-pattern (rest refal-sexp)))
+    (eval `(defun ,fun-name (x)
+	       (funcall
+		(pattern-matcher-maker
+		 #'basic-left-match
+		 #'basic-right-out)  
+		x
+		(quote ,fun-pattern))))))
+	     
+
+(defun cl-refal-load (file-path)  
+  (setq file-sexp
+	(with-open-file (s file-path)
+	  (read s)))
+  (cl-refal-defun file-sexp)
+  )
