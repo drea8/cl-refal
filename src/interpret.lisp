@@ -7,6 +7,30 @@
 ;; for his research in physics, automata, natural language translation,
 ;; artificial intelligence, and complexity theory.
 
+;; Turchin's take on expressing mathematic, logical, and lingustic relations in a
+;; simple Sentence term notation is extremely useful and insightful
+;; as an exercise in programming language design and information theory
+;; in general. The possible extensions for Refal pattern spaces as
+;; say semigroups or topological structures is obvious as one
+;; implements Refal in a homoiconic language like Lisp.
+
+;; Studying Refal in one respect one is exploring
+;; Automata theory heavily, but on the other hand much of what
+;; makes Refal unique is the Refal machine reader which relates more
+;; to information representation theories of data structures
+;; moreso than parsing automata like regular expressions, and
+;; in constructing optimized Refal compilers you end up
+;; writing automata around traversal of the data spaces rather than
+;; beginning with the automata as a runtime in its own right
+;; due to the "non-flat" possibility space of data structures
+;; readable by Refal-like languages.
+
+;; The compiler writer if they are a good Cyberneticist
+;; like Turchin also no longer takes for granted the
+;; given "Programmer's Reader" one has learned from education
+;; in one's native tongues and symbol systems,
+;; that "who is the master that makes the grass green" etc
+
 ;; Refal is described thusly on wikipedia in 2019,
 ;; "The basic data structure of Lisp and Prolog is a linear list built by cons operation in a sequential manner, thus with O(n) access to list's nth element...
 
@@ -37,7 +61,7 @@
 
 ;; Introduction to Refal
 
-;; A Refal program is a recursive List (or set thereof)
+;; A Refal program expression is a recursive graph
 ;; of Sentences, formed by Left and Right terms
 ;; that forms a Function mapping from Predicates
 ;; satisfies on the Left to results returned by their
@@ -166,7 +190,7 @@ We need to clarify the process of Refal function execution now.
 (lambda (input patterns)
   (loop for i in patterns ;; this Loop control structure/invariant,
      if (equal (first i) input) ;; this predicate match.
-     return (second i)) ) ;; and this return structure are important
+a     return (second i)) ) ;; and this return structure are important
 
 ;; What is happening here?
 
@@ -327,7 +351,7 @@ We need to clarify the process of Refal function execution now.
 ;; returns 'CB' from INPUT 'ABC'
 
 '(s.A s.A s.A)
-;; term repairs any three identical symbols like '666' or 'www'
+;; term returns any three identical symbols like '666' or 'www'
 
 '((s.A s.A s.A) s.A)
 ;; from 'www' returns 'w'
@@ -352,7 +376,7 @@ We need to clarify the process of Refal function execution now.
 ;; "who is the master that makes the grass green" etc
 
 '((s.Edge e s.Edge) s.Edge)
-;; with INPUT '404' returns '4'
+;; with INPUTs '404' or '4ab4' returns '4'
 
 					
 '(s.first e.middle s.last)
