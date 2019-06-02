@@ -5,7 +5,10 @@ Notes on the embodiment of Turchin's ideas on systems complexity, automata, and 
 REFAL was a 1968 pattern-matching functional programming language invented by Russian computer scientist and cyberneticist Valentin Turchin, author of "The Phenonema of Science" and early thinker in hypercomputation.
 
 # Install
-* (load "src/interpret.lisp")
+* (load "package.lisp")
+* (load "cl-refal.asd")
+* (ql:quickload :cl-refal)
+* or manually (load "src/interpret.lisp")
 
 # Features
 * Refal pattern matcher as an object
