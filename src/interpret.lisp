@@ -124,7 +124,7 @@ We need to clarify the process of Refal function execution now.
   (10 11)
   (11 00))
 
-;; Note this is a cylic group,
+;; Note this is a cyclic group,
 ;; but for now let us focus on it as a Refal function pattern
 
 ;; This pattern with an input of 00 returns 01 etc
