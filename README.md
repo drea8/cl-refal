@@ -21,8 +21,5 @@ REFAL was a 1968 pattern-matching functional programming language invented by Ru
 see "https://www.youtube.com/watch?v=DBZN7yTQ_QU" for a video from the Copenhagen research program into Turchin's supercompiler and metasystems ideas given strict automata theoretic consideration.
 
 # To Do
-* Workstation design,analysis,construction specification, implementation, declarative and procedural
-* Obninsk aesthetick
 * Refal expression syntax & semantick
 * dynamic left var matching s. e. substitution eval
-* Soviet labor analysis (Nikolai Bernstein)
